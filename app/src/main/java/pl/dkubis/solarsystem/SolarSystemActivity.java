@@ -17,7 +17,6 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.FrameLayout;
-import android.widget.TableLayout;
 
 import java.util.ArrayList;
 
@@ -33,19 +32,23 @@ public class SolarSystemActivity extends AppCompatActivity
     TabLayout moonsTabLayout;
     @Bind(R.id.containerLayout)
     FrameLayout containerLayout;
+
     @Bind(R.id.nav_view)
     NavigationView navView;
     @Bind(R.id.drawer_layout)
     DrawerLayout drawerLayout;
+
     private SolarObject[] planets;
     private SolarObject[] others;
-    private SolarObject[] objectWithMoons;
+    private SolarObject[] objectsWithMoons;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_solar_system);
         ButterKnife.bind(this);
+        setSupportActionBar(toolbar);
 
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
                 this, drawerLayout, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
@@ -71,8 +74,9 @@ public class SolarSystemActivity extends AppCompatActivity
             }
         }
 
-        objectWithMoons = new SolarObject[arrayList.size()];
-        objectWithMoons = arrayList.toArray(objectWithMoons);
+        objectsWithMoons = new SolarObject[arrayList.size()];
+
+        objectsWithMoons = arrayList.toArray(objectsWithMoons);
 
 
         navView.setCheckedItem(R.id.nav_planets);
@@ -89,6 +93,8 @@ public class SolarSystemActivity extends AppCompatActivity
         }
     }
 
+
+
     @SuppressWarnings("StatementWithEmptyBody")
     @Override
     public boolean onNavigationItemSelected(MenuItem item) {
@@ -96,14 +102,20 @@ public class SolarSystemActivity extends AppCompatActivity
         int id = item.getItemId();
 
         if (id == R.id.nav_planets) {
+
             SolarObjectsFragment fragment = SolarObjectsFragment.newInstance(planets);
+
             replaceFragment(fragment);
+
         } else if (id == R.id.nav_moons) {
-            replaceFragment(MoonsFragment.newInstance(objectWithMoons));
+
+            replaceFragment(MoonsFragment.newInstance(objectsWithMoons));
 
         } else if (id == R.id.nav_other) {
             SolarObjectsFragment fragment = SolarObjectsFragment.newInstance(others);
+
             replaceFragment(fragment);
+
         }
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
@@ -113,7 +125,6 @@ public class SolarSystemActivity extends AppCompatActivity
 
     private void replaceFragment(Fragment fragment) {
         FragmentTransaction fragmentTransaction = getSupportFragmentManager().beginTransaction();
-
         fragmentTransaction.replace(R.id.containerLayout, fragment);
         fragmentTransaction.commit();
     }
@@ -129,5 +140,7 @@ public class SolarSystemActivity extends AppCompatActivity
         moonsTabLayout.removeAllTabs();
         moonsTabLayout.setOnTabSelectedListener(null);
         moonsTabLayout.setVisibility(View.GONE);
+
     }
 }
+

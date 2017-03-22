@@ -12,7 +12,6 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.text.Html;
-import android.text.TextUtils;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -24,7 +23,7 @@ import java.io.IOException;
 import butterknife.Bind;
 import butterknife.ButterKnife;
 
-public class SolarObjectActivity extends AppCompatActivity {
+public class SolarObjectActivity extends AppCompatActivity implements SolarObjectsAdapter.SolarObjectClickedListener {
 
     public static final String OBJECT_KEY = "object";
     @Bind(R.id.objectImageView)
@@ -54,8 +53,6 @@ public class SolarObjectActivity extends AppCompatActivity {
         setSupportActionBar(toolbar);
 
         FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
-        boolean hasMovie = !TextUtils.isEmpty(solarObject.getVideo());
-        if()
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -64,10 +61,10 @@ public class SolarObjectActivity extends AppCompatActivity {
             }
         });
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-
         solarObject = (SolarObject) getIntent().getSerializableExtra(OBJECT_KEY);
 
         toolbarLayout.setTitle(solarObject.getName());
+
 
         try {
             String text = SolarObject.loadStringFromAssets(this, solarObject.getText());
@@ -76,7 +73,7 @@ public class SolarObjectActivity extends AppCompatActivity {
             e.printStackTrace();
         }
 
-        objectTextView.setText(solarObject.getText());
+
         Glide.with(this)
                 .load(solarObject.getImagePath())
                 .into(objectImageView);
@@ -84,8 +81,9 @@ public class SolarObjectActivity extends AppCompatActivity {
         moonsRecyclerView.setVisibility(solarObject.hasMoons() ? View.VISIBLE : View.GONE);
         moonsLabel.setVisibility(solarObject.hasMoons() ? View.VISIBLE : View.GONE);
 
-        if (solarObject.hasMoons()) {
+        if(solarObject.hasMoons()) {
             SolarObjectsAdapter adapter = new SolarObjectsAdapter(solarObject.getMoons());
+            adapter.setSolarObjectClickedListener(this);
             moonsRecyclerView.setAdapter(adapter);
             moonsRecyclerView.setLayoutManager(new LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false));
             moonsRecyclerView.setNestedScrollingEnabled(false);
@@ -96,5 +94,10 @@ public class SolarObjectActivity extends AppCompatActivity {
         Intent intent = new Intent(activity, SolarObjectActivity.class);
         intent.putExtra(OBJECT_KEY, solarObject);
         activity.startActivity(intent);
+    }
+
+    @Override
+    public void solarObjectClicked(SolarObject solarObject) {
+        SolarObjectActivity.start(this, solarObject);
     }
 }

@@ -4,10 +4,6 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentStatePagerAdapter;
 
-/**
- * Created by dkubis on 22.03.17.
- */
-
 public class MoonsPagerAdapter extends FragmentStatePagerAdapter {
 
     private final SolarObject[] objectsWithMoons;

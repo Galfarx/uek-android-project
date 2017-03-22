@@ -23,9 +23,7 @@
         <android.support.v7.widget.RecyclerView
             android:id="@+id/moonsRecyclerView"
             android:layout_width="match_parent"
-            android:layout_height="220dp">
-
-        </android.support.v7.widget.RecyclerView>
+            android:layout_height="220dp" />
 
         <TextView
             android:id="@+id/objectTextView"
@@ -33,8 +31,6 @@
             android:layout_height="wrap_content"
             android:layout_margin="@dimen/text_margin"
             android:text="@string/large_text" />
+
     </LinearLayout>
-
-
-
 </android.support.v4.widget.NestedScrollView>

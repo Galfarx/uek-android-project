@@ -3,13 +3,12 @@ package pl.dkubis.solarsystem;
 
 import android.content.Context;
 import android.os.Bundle;
-import android.support.annotation.Nullable;
+import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
 import android.support.v4.view.ViewPager;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.TableLayout;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
@@ -21,11 +20,12 @@ import butterknife.ButterKnife;
 public class MoonsFragment extends Fragment {
 
 
+    public static final String OBJECTS_KEY = "objects";
     @Bind(R.id.moonsViewPager)
     ViewPager moonsViewPager;
-    private static final String OBJECTS_KEY = "objects";
 
     private TabCallback tabCallback;
+
 
     public MoonsFragment() {
         // Required empty public constructor
@@ -63,7 +63,7 @@ public class MoonsFragment extends Fragment {
     }
 
     @Override
-    public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
+    public void onViewCreated(View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         SolarObject[] solarObjects = (SolarObject[]) getArguments().getSerializable(OBJECTS_KEY);
         MoonsPagerAdapter moonsPagerAdapter = new MoonsPagerAdapter(getChildFragmentManager(), solarObjects);
@@ -71,6 +71,8 @@ public class MoonsFragment extends Fragment {
 
         tabCallback.showTabs(moonsViewPager);
     }
+
+
 
     @Override
     public void onDestroyView() {

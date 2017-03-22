@@ -9,4 +9,5 @@
     tools:context="pl.dkubis.solarsystem.SolarSystemActivity"
     tools:showIn="@layout/app_bar_solar_system">
 
+
 </FrameLayout>

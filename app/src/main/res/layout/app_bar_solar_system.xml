@@ -4,6 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:fitsSystemWindows="true"
     tools:context="pl.dkubis.solarsystem.SolarSystemActivity">
 
     <android.support.design.widget.AppBarLayout
@@ -19,17 +20,19 @@
             app:popupTheme="@style/AppTheme.PopupOverlay" />
 
         <android.support.design.widget.TabLayout
+            xmlns:app="http://schemas.android.com/apk/res-auto"
             android:id="@+id/moonsTabLayout"
-            android:background="?attr/colorPrimary"
-            app:tabGravity="fill"
-            app:tabMode="scrollable"
             android:visibility="gone"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content">
-        </android.support.design.widget.TabLayout>
+            android:layout_height="wrap_content"
+            android:background="?attr/colorPrimary"
+            app:tabGravity="fill"
+            app:tabMode="scrollable" />
 
     </android.support.design.widget.AppBarLayout>
 
     <include layout="@layout/content_solar_system" />
+
+
 
 </android.support.design.widget.CoordinatorLayout>
