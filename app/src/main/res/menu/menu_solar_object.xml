@@ -3,8 +3,8 @@
     xmlns:tools="http://schemas.android.com/tools"
     tools:context="pl.dkubis.solarsystem.SolarObjectActivity">
     <item
-        android:id="@+id/action_settings"
+        android:id="@+id/action_set_as_wallpaper"
         android:orderInCategory="100"
-        android:title="@string/action_settings"
+        android:title="Set as wallpaper"
         app:showAsAction="never" />
 </menu>

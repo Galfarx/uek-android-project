@@ -1,10 +1,14 @@
 package pl.dkubis.solarsystem;
 
 import android.app.Activity;
+import android.app.WallpaperManager;
+import android.content.ActivityNotFoundException;
 import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
 import android.support.design.widget.AppBarLayout;
 import android.support.design.widget.CollapsingToolbarLayout;
+import android.support.design.widget.CoordinatorLayout;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
@@ -12,6 +16,9 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.text.Html;
+import android.text.TextUtils;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -53,15 +60,21 @@ public class SolarObjectActivity extends AppCompatActivity implements SolarObjec
         setSupportActionBar(toolbar);
 
         FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
-        fab.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
-                        .setAction("Action", null).show();
-            }
-        });
-        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         solarObject = (SolarObject) getIntent().getSerializableExtra(OBJECT_KEY);
+        boolean hasMovie = !TextUtils.isEmpty(solarObject.getVideo());
+        if(hasMovie) {
+            fab.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                showYouTubeVideo(solarObject.getVideo());
+                }
+            });
+        } else {
+            CoordinatorLayout.LayoutParams lp = (CoordinatorLayout.LayoutParams) fab.getLayoutParams();
+            lp.setAnchorId(View.NO_ID);
+            fab.setVisibility(View.GONE);
+        }
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
         toolbarLayout.setTitle(solarObject.getName());
 
@@ -90,6 +103,17 @@ public class SolarObjectActivity extends AppCompatActivity implements SolarObjec
         }
     }
 
+    private void showYouTubeVideo(String video) {
+
+        try {
+            Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse("vnd.youtube:" + video));
+            startActivity(intent);
+        } catch (ActivityNotFoundException  e) {
+            Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse("http://youtube.com/watch?v=" + video));
+            startActivity(intent);
+        }
+    }
+
     public static void start(Activity activity, SolarObject solarObject) {
         Intent intent = new Intent(activity, SolarObjectActivity.class);
         intent.putExtra(OBJECT_KEY, solarObject);
@@ -99,5 +123,29 @@ public class SolarObjectActivity extends AppCompatActivity implements SolarObjec
     @Override
     public void solarObjectClicked(SolarObject solarObject) {
         SolarObjectActivity.start(this, solarObject);
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.menu_solar_object, menu);
+        return super.onCreateOptionsMenu(menu);
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        if(item.getItemId() == R.id.action_set_as_wallpaper) {
+            setAsWallpaper(solarObject.getImage());
+            return true;
+        }
+        return super.onOptionsItemSelected(item);
+    }
+
+    private void setAsWallpaper(String image) {
+        WallpaperManager wallpaperManager = WallpaperManager.getInstance(this);
+        try {
+            wallpaperManager.setStream(getAssets().open(image));
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 }
